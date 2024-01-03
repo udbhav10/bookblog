@@ -6,7 +6,7 @@ const { Pool } = pg;
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const connectionString = 'postgresql://postgres:dalal123@localhost:5432/auth';
+const connectionString = process.env.CONNECTION_STRING;
 
 const pool = new Pool({
     connectionString: isProduction ? process.env.DATABASE_URL : connectionString
