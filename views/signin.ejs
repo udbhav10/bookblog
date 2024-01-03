@@ -1,0 +1,37 @@
+<%- include('partials/header.ejs') %>
+
+<main>
+
+    <div class="signin-main">
+        <div class="signin-field">
+            <img src="images/logocrop.png" alt="Book Blog" height="80px">
+        </div>
+        <form action="/signin" , method="POST">
+            <div class="signin-field">
+                <div class="main-heading" style="padding-top: 0; font-size: 2.5rem;">
+                    <span style="color: #4D2557; font-weight: bold;">Please </span><span
+                        style="color: #D886AF; font-weight: regular;">sign in</span>
+                </div>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content first-signin-content" type="text" name="username" id="username"
+                    placeholder="Username" autofocus autocomplete="off" required>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content last-signin-content" type="password" name="password" id="password"
+                    placeholder="Password" autocomplete="off" required>
+            </div>
+            <% if(locals.error) { %>
+            <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;"><%= error %></p>
+
+            <% } else {} %>
+            <div class="signin-field-buttons">
+                <button type="submit" class="signin-buttons">Sign In</button>
+                <a href="/register"><button type="button" class="signin-buttons">Sign Up</button></a>
+            </div>
+        </form>
+    </div>
+
+</main>
+
+<%- include('partials/footer.ejs') %>

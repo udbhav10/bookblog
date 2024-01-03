@@ -1,0 +1,137 @@
+<%- include('partials/header-auth.ejs') %>
+
+<main>
+
+    <div class="main-heading">
+        <span style="color: #4D2557; font-weight: bold;">Your</span><span style="color: #D886AF; font-weight: regular;">
+            Posts</span>
+    </div>
+    <hr style="margin-bottom: 20px;">
+    <div class="main-body">
+        <div class="newpost-area">
+            <% if (data.length === 0) { %>
+            <a href="/create"><button type="button" class="signin-buttons" style="width: 300px; margin: 10px 0px;">Write
+                    your first review!</button></a>
+        </div>
+        <div class="line-class-myposts">
+            <hr style="margin: 20px 0px;">
+        </div>
+        <% } else { %>
+        <a href="/create"><button type="button" class="signin-buttons" style="width: 180px; margin: 10px 0px;">+ New
+                Post</button></a>
+
+    </div>
+    <div class="line-class-myposts">
+        <hr style="margin: 20px 0px; opacity: 15%;">
+    </div>
+    <div class="newpost-area">
+        <% if (drafts.length === 0) { %>
+        <p style="font-size: 20px; font-weight: 600; margin: 0px;">There are no saved drafts!</p>
+        <% } else { %>
+        <p style="font-size: 20px; font-weight: 600; margin: 0px;">Drafts</p>
+        <% } %>
+    </div>
+    <div class="line-class-myposts">
+        <hr style="margin: 20px 0px; opacity: 15%;">
+    </div>
+    <%  let postNum = 1; %>
+
+    <% drafts.forEach(review => { %>
+
+    <div class="myposts-center myposts-center-drafts">
+        <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-draft">
+            <input type="hidden" value="<%= JSON.stringify(review) %>" name="post" />
+            <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
+            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+        </form>
+        <p style="opacity: 0.65; margin-bottom: 7px;">Created on <%=review.datecreated%></p>
+        <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
+        <p>Rating:
+            <% for (let i = 0; i < review.rating; i++) { %>
+            <i class="fa-solid fa-star" style="color: #4d2557;"></i>
+            <% } %>
+        </p>
+        <p><%=review.summary%></p>
+    </div>
+    <div class="myposts-right">
+        <form action="/edit" method="POST">
+            <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Edit</button>
+        </form>
+        <form action="/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete <%= review.title %>?');">
+            <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Delete</button>
+        </form>
+        <form action="/publish" method="POST">
+            <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Publish</button>
+        </form>
+    </div>
+    <div class="line-class-myposts">
+        <hr style="margin-bottom: 20px; opacity: 15%;">
+    </div>
+    <% postNum++ }) %>
+
+
+    <div class="newpost-area">
+        <% if (published.length === 0) { %>
+        <p style="font-size: 20px; font-weight: 600; margin: 0px;">There are no published posts!</p>
+        <% } else { %>
+        <p style="font-size: 20px; font-weight: 600; margin: 0px;">Published</p>
+        <% } %>
+    </div>
+    <div class="line-class-myposts">
+        <hr style="margin: 20px 0px; opacity: 15%;">
+    </div>
+
+    <%  postNum = 1; %>
+
+    <% published.forEach(review => { %>
+
+    <div class="myposts-center myposts-center-published">
+        <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-published">
+            <input type="hidden" value="<%= JSON.stringify(review) %>" name="post" />
+            <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
+            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+        </form>
+        <p style="opacity: 0.65; margin-bottom: 7px;">Published on <%=review.datecreated%></p>
+        <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
+        <p>Rating:
+            <% for (let i = 0; i < review.rating; i++) { %>
+            <i class="fa-solid fa-star" style="color: #4d2557;"></i>
+            <% } %>
+        </p>
+        <p><%=review.summary%></p>
+    </div>
+    <div class="myposts-right">
+        <form action="/edit" method="POST">
+            <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Edit</button>
+        </form>
+        <form action="/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete <%= review.title %>?');">
+            <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Delete</button>
+        </form>
+    </div>
+    <div class="line-class-myposts">
+        <hr style="margin-bottom: 20px; opacity: 15%;">
+    </div>
+    <% postNum++ }) %>
+    <% } %>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+<script>
+    for (let i = 1; i <= $(".myposts-center-drafts > .view").length; i++) {
+
+        $("#" + i + "-draft > p").on("click", (e) => {
+            $("#" + i + "-draft").submit();
+        });
+    }
+
+    for (let i = 1; i <= $(".myposts-center-published > .view").length; i++) {
+
+        $("#" + i + "-published > p").on("click", (e) => {
+            $("#" + i + "-published").submit();
+        });
+    }
+</script>
+
+
+<%- include('partials/footer-auth.ejs') %>

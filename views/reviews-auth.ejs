@@ -1,0 +1,277 @@
+<%- include('partials/header-auth.ejs') %>
+
+<main>
+
+    <div class="main-heading">
+        <span style="color: #4D2557; font-weight: bold;">Re</span><span
+            style="color: #D886AF; font-weight: regular;">views</span>
+    </div>
+    <hr style="margin-bottom: 20px;">
+    <div class="main-body">
+        <div class="review-center">
+            <% if(!locals.filterData) {%>
+            <%  let postNum = 1; %>
+            <% if (data.length === 0) { %>
+            <h1> There are no reviews yet! </h1>
+            <% } else {   %>
+            <% data.forEach(review => { %>
+            <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-post">
+            <input type="hidden" value="<%= JSON.stringify(review) %>" name="post"/>
+            <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
+            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+            </form>
+            <p style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.datepublished%></p>
+            <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
+            <p>Rating:
+                <% for (let i = 0; i < review.rating; i++) { %>
+                <i class="fa-solid fa-star" style="color: #4d2557;"></i>
+                <% } %>
+            </p>
+            <p><%=review.summary%></p>
+            <hr style="margin-bottom: 20px; opacity: 15%;">
+            <% postNum++ }) %>
+            <%  } %>
+            <%} else { %>
+                <% if (filterData.length === 0) { %>
+                    <h1> No reviews found. </h1>
+                    <% } else { %>
+                    <%  let postNum = 1; %>
+                    <% filterData.forEach(review => { %>
+                    <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-post">
+                        <input type="hidden" value="<%= JSON.stringify(review) %>" name="post"/>
+                    <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
+                    <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+                    </form>
+                    <p style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.date%></p>
+                    <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
+                    <p>Rating:
+                        <% for (let i = 0; i < review.rating; i++) { %>
+                        <i class="fa-solid fa-star" style="color: #4d2557;"></i>
+                        <% } %>
+                    </p>
+                    <p><%=review.summary%></p>
+                    <hr style="margin-bottom: 20px; opacity: 15%;">
+                    <% postNum++; }) %>
+                    <% } %>
+            <% } %>
+        </div>
+        <div class="main-right">
+            <h4 style="margin-top: 0px; margin-bottom: 8px;"><span
+                    style="color: #4D2557; font-weight: bold;">FILTER</span><span
+                    style="color: #D886AF; font-weight: regular;"> BY</span></h4>
+            <hr style="opacity: 15%;">
+
+            <p class="list-title genre-list-title" style="font-weight: 600; margin-bottom: 2px;"><span>Genre &nbsp;<i
+                        class="fa-solid fa-caret-down" style="color: #4d2557;"></i></span></p>
+            <ul class="genre-list">
+                <% var uniqGen = new Set();%>
+                <% data.forEach(review => { %>
+                <% uniqGen.add(review.genre) %>
+                <% }) %>
+                <% let num = 1 %>
+                <% uniqGen.forEach(genre => { %>
+                <form action="/reviews" class="reviews-form" id = "<%= num %>-genre-filter-form" method="POST">
+                    <input type="hidden" value="<%= genre %>" name="genre" />
+                    <li><span class="<%= num %>-genre"><%= genre %></span></li>
+                </form>
+                <% num++ %>
+                <% }) %>
+            </ul>
+
+            <p class="list-title ratings-list-title" style="font-weight: 600; margin-bottom: 2px;"><span>Ratings
+                    &nbsp;<i class="fa-solid fa-caret-down" style="color: #4d2557;"></i></span></p>
+            <ul class="ratings-list">
+
+                <li><form action="/reviews" class="reviews-form" id="1-ratings-filter-form" method="POST"><input type="hidden" name="ratingValue" value="1"/><i class="1-star fa-regular fa-star fa-star-right" style="color: #4d2557;"></i></form><form id="2-ratings-filter-form" action="/reviews" class="reviews-form" method="POST"><input type="hidden" name="ratingValue" value="2"/><i class="2-star fa-regular fa-star fa-star-right" style="color: #4d2557;"></i></form><form id="3-ratings-filter-form" action="/reviews" class="reviews-form" method="POST"><input type="hidden" name="ratingValue" value="3"/><i class="3-star fa-regular fa-star fa-star-right" style="color: #4d2557;"></i></form><form id="4-ratings-filter-form" action="/reviews" class="reviews-form" method="POST"><input type="hidden" name="ratingValue" value="4"/><i class="4-star fa-regular fa-star fa-star-right" style="color: #4d2557;"></i></form><form id="5-ratings-filter-form" action="/reviews" class="reviews-form" method="POST"><input type="hidden" name="ratingValue" value="5"/><i class="5-star fa-regular fa-star fa-star-right" style="color: #4d2557;"></i></form></li>
+
+
+            </ul>
+
+            <h4 style="margin-bottom: 8px; margin-top: 48px;"><span
+                    style="color: #4D2557; font-weight: bold;">SORT</span><span
+                    style="color: #D886AF; font-weight: regular;"> BY</span></h4>
+            <hr style="opacity: 15%;">
+            <p class="list-title genre-list-sort-title" style="font-weight: 600; margin-bottom: 2px;"><span>Genre
+                    &nbsp;<i class="fa-solid fa-caret-down" style="color: #4d2557;"></i></span></p>
+            <ul class="genre-list-sort">
+                <form action="/reviews" class="reviews-form" id = "asc-genre-sort-form" method="POST">
+                    <input type="hidden" value="asc" name="genresort" />
+                <li><span>Ascending <i class="fa-solid fa-arrow-down-a-z" style="color: #4d2557;"></i></span></li>
+                </form>
+                <form action="/reviews" class="reviews-form" id = "desc-genre-sort-form" method="POST">
+                    <input type="hidden" value="desc" name="genresort" />
+                <li><span>Descending <i class="fa-solid fa-arrow-up-a-z" style="color: #4d2557;"></i></span></li>
+                </form>
+            </ul>
+
+            <p class="list-title ratings-list-sort-title" style="font-weight: 600; margin-bottom: 2px;"><span>Ratings
+                    &nbsp;<i class="fa-solid fa-caret-down" style="color: #4d2557;"></i></span></p>
+            <ul class="ratings-list-sort">
+                <form action="/reviews" class="reviews-form" id = "desc-ratings-sort-form" method="POST">
+                    <input type="hidden" value="desc" name="ratingssort" />
+                <li><span>Highest first <i class="fa-solid fa-arrow-down-9-1" style="color: #4d2557;"></i></span></li>
+                </form>
+                <form action="/reviews" class="reviews-form" id = "asc-ratings-sort-form" method="POST">
+                    <input type="hidden" value="asc" name="ratingssort" />
+                <li><span>Lowest first <i class="fa-solid fa-arrow-up-9-1" style="color: #4d2557;"></i></span></li>
+                </form>
+            </ul>
+
+            <p class="list-title date-list-sort-title" style="font-weight: 600; margin-bottom: 2px;"><span>Date
+                    Published
+                    &nbsp;<i class="fa-solid fa-caret-down" style="color: #4d2557;"></i></span></p>
+            <ul class="date-list-sort">
+                <form action="/reviews" class="reviews-form" id = "desc-date-sort-form" method="POST">
+                    <input type="hidden" value="desc" name="datesort" />
+                <li><span>Latest first &nbsp;<i class="fa-regular fa-calendar-plus" style="color: #4D2557"></i></span></li>
+                </form>
+                <form action="/reviews" class="reviews-form" id = "asc-date-sort-form" method="POST">
+                    <input type="hidden" value="asc" name="datesort" />
+                <li><span>Earliest first &nbsp;<i class="fa-regular fa-calendar-minus" style="color: #4D2557"></i></span></li>
+                </form>
+            </ul>
+            <form action="/reviews" method="post" id="clear-filters">
+            <input type="hidden" value="clear" name="clear" />
+            <h4 id="clearfilterheading" style="margin-bottom: 8px; margin-top: 48px; text-align: right;"><span
+                style="color: #4D2557; font-weight: bold; cursor: pointer;">CLEAR</span><span
+                style="color: #D886AF; font-weight: regular; cursor: pointer;"> FILTERS</span></h4></form>
+        <hr style="opacity: 15%;">
+        </div>
+    </div>
+</main>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+<script>
+    $(".genre-list-title > span").on("click", (e) => {
+        const countHeight = $(".genre-list > form > li").length * 20;
+        if ($(".genre-list").css("max-height") == '0px') {
+            $(".genre-list").css("max-height", countHeight.toString() + "px");
+            $(".genre-list-title > span > i").addClass("fa-flip-vertical");
+        } else {
+            $(".genre-list").css("max-height", "0px");
+            $(".genre-list-title > span > i").removeClass("fa-flip-vertical");
+        }
+    });
+
+    $(".genre-list-sort-title > span").on("click", (e) => {
+        const countHeight = $(".genre-list-sort > form > li").length * 20;
+        if ($(".genre-list-sort").css("max-height") == '0px') {
+            $(".genre-list-sort").css("max-height", countHeight.toString() + "px");
+            $(".genre-list-sort-title > span > i").addClass("fa-flip-vertical");
+        } else {
+            $(".genre-list-sort").css("max-height", "0px");
+            $(".genre-list-sort-title > span > i").removeClass("fa-flip-vertical");
+        }
+    });
+
+    $(".ratings-list-title > span").on("click", (e) => {
+        const countHeight = 20;
+        if ($(".ratings-list").css("max-height") == '0px') {
+            $(".ratings-list").css("max-height", countHeight.toString() + "px");
+            $(".ratings-list-title > span > i").addClass("fa-flip-vertical");
+        } else {
+            $(".ratings-list").css("max-height", "0px");
+            $(".ratings-list-title > span > i").removeClass("fa-flip-vertical");
+        }
+    });
+
+    $(".ratings-list-sort-title > span").on("click", (e) => {
+        const countHeight = $(".ratings-list-sort > form > li").length * 20;
+        if ($(".ratings-list-sort").css("max-height") == '0px') {
+            $(".ratings-list-sort").css("max-height", countHeight.toString() + "px");
+            $(".ratings-list-sort-title > span > i").addClass("fa-flip-vertical");
+        } else {
+            $(".ratings-list-sort").css("max-height", "0px");
+            $(".ratings-list-sort-title > span > i").removeClass("fa-flip-vertical");
+        }
+    });
+
+    $(".date-list-sort-title > span").on("click", (e) => {
+        const countHeight = $(".date-list-sort > form > li").length * 20;
+        if ($(".date-list-sort").css("max-height") == '0px') {
+            $(".date-list-sort").css("max-height", countHeight.toString() + "px");
+            $(".date-list-sort-title > span > i").addClass("fa-flip-vertical");
+        } else {
+            $(".date-list-sort").css("max-height", "0px");
+            $(".date-list-sort-title > span > i").removeClass("fa-flip-vertical");
+        }
+    });
+
+    var starsSelected = 0;
+    var starsSelectedSort = 0;
+    $(".fa-star-right").on({
+        mouseenter: function (e) {
+            var starsSelected = e.target.classList[0][0];
+            for (let i = 1; i <= starsSelected; i++) {
+                $("." + i + "-star").removeClass("fa-regular").addClass("fa-solid");
+            }
+        },
+        mouseleave: function (e) {
+            $(".fa-star-right").removeClass("fa-solid").addClass("fa-regular");
+        }
+    })
+    $(".fa-star-right-sort").on({
+        mouseenter: function (e) {
+            var starsSelectedSort = e.target.classList[0][0];
+            for (let i = 1; i <= starsSelectedSort; i++) {
+                $("." + i + "-star-sort").removeClass("fa-regular").addClass("fa-solid");
+            }
+        },
+        mouseleave: function (e) {
+            $(".fa-star-right-sort").removeClass("fa-solid").addClass("fa-regular");
+        }
+    })
+
+    $(".genre-list > form > li > span").on("click", (e) => {
+        $("#genre-filter-form").submit();
+    })
+
+    for (let i = 1; i <= $(".genre-list > form > li").length; i++) {
+        $(".genre-list > form > li > ." + i + "-genre").on("click", (e) => {
+        $("#" + i + "-genre-filter-form").submit();
+    })
+    }
+
+    for (let i = 1; i <= 5; i++) {
+        $("." + i + "-star").on("click", (e) => {
+            $("#" + i + "-ratings-filter-form").submit();
+        })
+    }
+    
+    for(let i = 1; i <= $(".review-center > .view").length; i++) {
+
+        $("#" + i + "-post > p").on("click", (e) => {
+            $("#" + i + "-post").submit();
+        });
+    }
+
+    $("#clear-filters > h4 > span").on("click", (e) => {
+        $("#clear-filters").submit();
+    })
+
+    $("#asc-genre-sort-form > li > span").on("click", (e) => {
+        $("#asc-genre-sort-form").submit();
+    })
+
+    $("#desc-genre-sort-form > li > span").on("click", (e) => {
+        $("#desc-genre-sort-form").submit();
+    })
+
+    $("#asc-ratings-sort-form > li > span").on("click", (e) => {
+        $("#asc-ratings-sort-form").submit();
+    })
+
+    $("#desc-ratings-sort-form > li > span").on("click", (e) => {
+        $("#desc-ratings-sort-form").submit();
+    })
+
+    $("#asc-date-sort-form > li > span").on("click", (e) => {
+        $("#asc-date-sort-form").submit();
+    })
+
+    $("#desc-date-sort-form > li > span").on("click", (e) => {
+        $("#desc-date-sort-form").submit();
+    })
+
+</script>
+<%- include('partials/footer-auth.ejs') %>

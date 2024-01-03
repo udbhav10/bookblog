@@ -1,0 +1,93 @@
+<%- include('partials/header-auth.ejs') %>
+
+<main>
+
+    <div class="main-heading">
+        <span style="color: #4D2557; font-weight: bold;">Create</span><span
+            style="color: #D886AF; font-weight: regular;">
+            a post</span>
+    </div>
+    <hr style="margin-bottom: 20px;">
+    <div class="create-main">
+        <form action="/create" method="POST">
+            <div class="create-field">
+                <input class="create-content" type="text" name="title" id="title" placeholder="Book Title" autofocus
+                    autocomplete="off" required>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="bookauthor" id="bookauthor" placeholder="Author"
+                    autocomplete="off" required>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="genre" id="genre" placeholder="Genre" autocomplete="off"
+                    required>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="isbn" id="isbn" minlength="10" maxlength=""
+                    placeholder="10 digit ISBN number of the book" autocomplete="off" required></input>
+                <% if(locals.errorisbn) { %>
+                <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;">Incorrect ISBN</p>
+                <% } else {} %>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="author" id="author" placeholder="Your name" value="<%= user.fname%> <%= user.lname %>"
+                    autocomplete="off" required>
+            </div>
+            <div class="create-field">
+                <textarea class="create-content" rows="8" type="text" name="summary" id="summary"
+                    placeholder="Summary (about 100 words)" autocomplete="off" required></textarea>
+            </div>
+            <div class="create-field">
+                <textarea class="create-content" rows="20" type="text" name="content" id="content"
+                    placeholder="Write your review" autocomplete="off" required></textarea>
+            </div>
+            <div class="create-field">
+                <input class="create-content" style="width: 96.7%;" type="number" name="rating" id="rating"
+                    placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off" required>
+            </div>
+            <div class="signin-field-buttons">
+                <button type="submit" name="action" value="saveDraft" class="signin-buttons savedraft-button">Save
+                    draft</button>
+                <button type="submit" name="action" value="publish"
+                    class="signin-buttons publish-button">Publish</button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $("#isbn").on("input", function () {
+            checkLengthISBN();
+        });
+
+        $("#rating").on("input", function () {
+            checkRating();
+        });
+
+        function checkLengthISBN() {
+            if ($("#isbn").val().length != 10 && $("#isbn").val().length != 0) {
+                $("#isbn").css("background-color", "#ff00000f");
+            } else {
+                $("#isbn").css("background-color", "");
+            }
+        }
+
+        function checkRating() {
+            if (($("#rating").val() < 1 || $("#rating").val() > 5) && $("#rating").val().length != 0) {
+                $("#rating").css("background-color", "#ff00000f");
+            } else {
+                $("#rating").css("background-color", "");
+            }
+        }
+
+    })
+</script>
+
+<%- include('partials/footer-auth.ejs') %>

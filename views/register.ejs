@@ -1,0 +1,82 @@
+<%- include('partials/header.ejs') %>
+
+<main>
+
+    <div class="signin-main">
+        <div class="signin-field">
+            <img src="images/logocrop.png" alt="Book Blog" height="80px">
+        </div>
+        <form action="/register" , method="POST">
+            <div class="signin-field">
+                <div class="main-heading" style="padding-top: 0; font-size: 2.5rem;">
+                    <span style="color: #4D2557; font-weight: bold;">Please enter</span><span
+                        style="color: #D886AF; font-weight: regular;"> your details.</span>
+                </div>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content first-signin-content" type="text" name="fName" id="fName"
+                    placeholder="First Name" autofocus autocomplete="off" required>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content" type="text" name="lName" id="lName" placeholder="Last Name"
+                    autocomplete="off" required>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content" type="text" name="username" id="username" placeholder="Username"
+                    autocomplete="off" required>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content" type="password" name="password" id="password" placeholder="Password"
+                    autocomplete="off" required>
+            </div>
+            <div class="signin-field">
+                <input class="signin-content last-signin-content" type="text" name="repassword" id="repassword"
+                    placeholder="Confirm password" autocomplete="off" required>
+            </div>
+            <% if(locals.error) { %>
+            <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;"><%= error %></p>
+
+            <% } else {} %>
+            <div class="signin-field-buttons">
+                <button type="submit" href="/register" class="signin-buttons register-button">Create account</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        var repasswordVisited = false;
+
+        // When the re-password field gets focus
+        $("#repassword").focus(function () {
+            repasswordVisited = true;
+        });
+
+        // Attach an input event handler to #repassword
+        $("#repassword").on("input", function () {
+            checkPasswords();
+        });
+
+        // Attach an input event handler to #password
+        $("#password").on("input", function () {
+            // Check passwords only if repassword field has been visited
+            if (repasswordVisited) {
+                checkPasswords();
+            }
+        });
+
+        // Function to check passwords and update styles
+        function checkPasswords() {
+            if ($("#password").val() !== $("#repassword").val()) {
+                $("#repassword").css("background-color", "#ff00000f");
+            } else {
+                $("#repassword").css("background-color", ""); // Reset color if passwords match
+            }
+        }
+    });
+</script>
+
+<%- include('partials/footer.ejs') %>

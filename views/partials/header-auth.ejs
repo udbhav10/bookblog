@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Quicksand:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://kit.fontawesome.com/9224500948.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+
+    <header>
+        <img class="myLogo" src="images/logo.png" alt="Book Blog" height="50px" style="padding-right: 10px;">
+        <a href="/" class="header-links">Home</a>
+        <a href="/reviews" class="header-links">Reviews</a>
+        <a class="header-links">Contact</a>
+        <a href="/myposts" class="header-links">My Posts</a>
+        <div class="dropdown">
+            <button class="header-links dropdown-btn" style="padding-right: 0;">Hi, <%= user.fname %>&nbsp;&nbsp;<i class="fa-solid fa-caret-down"
+                    style="color: #4d2557;"></i></button>
+            <div class="dropdown-content">
+                <a href="/signout">Sign Out</a>
+            </div>
+        </div>
+
+    </header>
+
+    <hr>

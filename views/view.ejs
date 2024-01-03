@@ -1,0 +1,24 @@
+<%- include('partials/header.ejs') %>
+
+<main>
+
+    <div class="main-heading" style="padding: 5px 0px;">
+        <h3
+            style="color: #4D2557; font-weight: bold; font-size: 21px; font-family: 'Merriweather', serif; letter-spacing: 1.1px;">
+            <%= post.title %></h3>
+    </div>
+    <hr style="margin-bottom: 20px;">
+
+    <div class="view-body">
+        <div class="review-center" style="padding-right: 0px;">
+            <p style="margin-bottom: 20px; opacity: 0.65;">By <%=post.author%></p>
+            <p style="margin-bottom: 20px;">Rating:
+                <% for (let i = 0; i < post.rating; i++) { %>
+                <i class="fa-solid fa-star" style="color: #4d2557;"></i>
+                <% } %></p>
+            <p> <%- post.content.replace(/\n/g, '<br>') %> </p>
+        </div>
+    </div>
+
+
+    <%- include('partials/footer.ejs') %>
