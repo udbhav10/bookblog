@@ -333,6 +333,7 @@ form {
     margin-left: auto;
     position: relative;
     display: inline-block;
+    bottom: 1.5px;
 }
 
 .dropdown-btn {
@@ -464,7 +465,9 @@ form {
 
     .header-links {
         font-size: 9pt;
+        padding: 0 5px;
     }
+    
     .main-page-button {
         width: 300px;
     }
