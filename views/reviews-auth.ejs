@@ -18,9 +18,9 @@
             <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-post">
             <input type="hidden" value="<%= JSON.stringify(review) %>" name="post"/>
             <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
-            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+            <p class="review-title"><%=review.title%></p>
             </form>
-            <p style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.datepublished%></p>
+            <p class="author-date" style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.datepublished%></p>
             <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
             <p>Rating:
                 <% for (let i = 0; i < review.rating; i++) { %>
@@ -40,9 +40,9 @@
                     <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-post">
                         <input type="hidden" value="<%= JSON.stringify(review) %>" name="post"/>
                     <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
-                    <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+                    <p class="review-title"><%=review.title%></p>
                     </form>
-                    <p style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.date%></p>
+                    <p class="author-date" style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.date%></p>
                     <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
                     <p>Rating:
                         <% for (let i = 0; i < review.rating; i++) { %>

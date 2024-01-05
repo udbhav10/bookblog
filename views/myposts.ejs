@@ -13,17 +13,19 @@
             <a href="/create"><button type="button" class="signin-buttons" style="width: 300px; margin: 10px 0px;">Write
                     your first review!</button></a>
         </div>
-        <div class="line-class-myposts">
+        <div class="line-class-myposts hide-when-mob">
             <hr style="margin: 20px 0px;">
         </div>
+        <hr style="margin: 20px 0px; width: 100%;" class="hide-when-full">
         <% } else { %>
         <a href="/create"><button type="button" class="signin-buttons" style="width: 180px; margin: 10px 0px;">+ New
                 Post</button></a>
 
     </div>
-    <div class="line-class-myposts">
+    <div class="line-class-myposts hide-when-mob">
         <hr style="margin: 20px 0px; opacity: 15%;">
     </div>
+    <hr style="margin: 20px 0px; width: 100%; opacity: 15%;" class="hide-when-full">
     <div class="newpost-area">
         <% if (drafts.length === 0) { %>
         <p style="font-size: 20px; font-weight: 600; margin: 0px;">There are no saved drafts!</p>
@@ -31,9 +33,10 @@
         <p style="font-size: 20px; font-weight: 600; margin: 0px;">Drafts</p>
         <% } %>
     </div>
-    <div class="line-class-myposts">
+    <div class="line-class-myposts hide-when-mob">
         <hr style="margin: 20px 0px; opacity: 15%;">
     </div>
+    <hr style="margin: 20px 0px; width: 100%; opacity: 15%;" class="hide-when-full">
     <%  let postNum = 1; %>
 
     <% drafts.forEach(review => { %>
@@ -42,7 +45,7 @@
         <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-draft">
             <input type="hidden" value="<%= JSON.stringify(review) %>" name="post" />
             <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
-            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+            <p class="review-title"><%=review.title%></p>
         </form>
         <p style="opacity: 0.65; margin-bottom: 7px;">Created on <%=review.datecreated%></p>
         <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
@@ -64,9 +67,10 @@
             <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Publish</button>
         </form>
     </div>
-    <div class="line-class-myposts">
-        <hr style="margin-bottom: 20px; opacity: 15%;">
+    <div class="line-class-myposts hide-when-mob">
+        <hr style="margin: 20px 0px; opacity: 15%;">
     </div>
+    <hr style="margin: 20px 0px; width: 100%; opacity: 15%;" class="hide-when-full">
     <% postNum++ }) %>
 
 
@@ -77,9 +81,10 @@
         <p style="font-size: 20px; font-weight: 600; margin: 0px;">Published</p>
         <% } %>
     </div>
-    <div class="line-class-myposts">
+    <div class="line-class-myposts hide-when-mob">
         <hr style="margin: 20px 0px; opacity: 15%;">
     </div>
+    <hr style="margin: 20px 0px; width: 100%; opacity: 15%;" class="hide-when-full">
 
     <%  postNum = 1; %>
 
@@ -89,7 +94,7 @@
         <form class="view" action="/view" method="POST" style="text-align: left;" id="<%=postNum%>-published">
             <input type="hidden" value="<%= JSON.stringify(review) %>" name="post" />
             <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
-            <p style="font-size: 20px; font-weight: 600; margin-bottom: 7px; cursor: pointer;"><%=review.title%></p>
+            <p class="review-title"><%=review.title%></p>
         </form>
         <p style="opacity: 0.65; margin-bottom: 7px;">Published on <%=review.datecreated%></p>
         <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
@@ -108,9 +113,10 @@
             <button name="post" value="<%= JSON.stringify(review) %>" type="submit" class="signin-buttons" style="width: 120px; margin: 10px;">Delete</button>
         </form>
     </div>
-    <div class="line-class-myposts">
-        <hr style="margin-bottom: 20px; opacity: 15%;">
+    <div class="line-class-myposts hide-when-mob">
+        <hr style="margin: 20px 0px; opacity: 15%;">
     </div>
+    <hr style="margin: 20px 0px; width: 100%; opacity: 15%;" class="hide-when-full">
     <% postNum++ }) %>
     <% } %>
     </div>
