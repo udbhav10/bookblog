@@ -22,18 +22,19 @@
             </div>
             <div class="create-field">
                 <input class="create-content" type="text" name="genre" id="genre" placeholder="Genre" autocomplete="off"
-                    value = "<%= post.genre %>" required>
+                    value="<%= post.genre %>" required>
             </div>
             <div class="create-field">
                 <input class="create-content" type="text" name="isbn" id="isbn" minlength="10" maxlength=""
-                    value = "<%= post.isbn10 %>" placeholder="10 digit ISBN number of the book" autocomplete="off" required></input>
+                    value="<%= post.isbn10 %>" placeholder="10 digit ISBN number of the book" autocomplete="off"
+                    required></input>
                 <% if(locals.errorisbn) { %>
                 <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;">Incorrect ISBN</p>
                 <% } else {} %>
             </div>
             <div class="create-field">
-                <input class="create-content" type="text" name="author" id="author" placeholder="Your name" value="<%= user.fname%> <%= user.lname %>"
-                    autocomplete="off" required>
+                <input class="create-content" type="text" name="author" id="author" placeholder="Your name"
+                    value="<%= user.fname%> <%= user.lname %>" autocomplete="off" required>
             </div>
             <div class="create-field">
                 <textarea class="create-content" rows="8" type="text" name="summary" id="summary"
@@ -45,13 +46,24 @@
             </div>
             <div class="create-field">
                 <input class="create-content" style="width: 96.7%;" type="number" name="rating" id="rating"
-                    value = "<%= post.rating %>"  placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off" required>
+                    value="<%= post.rating %>" placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off"
+                    required>
             </div>
+            <% if(!locals.create) { %>
             <div class="signin-field-buttons">
                 <button type="submit" name="action" value="saveChanges" class="signin-buttons savedraft-button">Save
                     changes</button>
             </div>
+            <% } else { %>
 
+            <div class="signin-field-buttons">
+                <button type="submit" name="action" value="saveDraft" class="signin-buttons savedraft-button">Save
+                    draft</button>
+                <button type="submit" name="action" value="publish"
+                    class="signin-buttons publish-button">Publish</button>
+            </div>
+
+            <% } %>
         </form>
     </div>
 </main>

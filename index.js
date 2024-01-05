@@ -105,10 +105,20 @@ app.post("/create", async (req, res) => {
         const coverlink = 'https://covers.openlibrary.org/b/isbn/' + isbn10 + '-M.jpg';
         const datecreated = new Date().getDate().toString() + "-" + ((new Date().getMonth()) + 1).toString() + "-" + new Date().getFullYear().toString();
         if (isbn10.length != 10) {
-
-            res.render("create.ejs", {
+            const post = {
+                title: title,
+                genre: genre,
+                author: author,
+                isbn10: "",
+                summary: summary,
+                content: content,
+                rating: rating
+            }
+            res.render("edit.ejs", {
                 user: req.user,
-                errorisbn: 1
+                errorisbn: 1,
+                post: post,
+                create: 1
             });
         } else if (req.body.action == 'saveDraft') {
 
@@ -146,9 +156,19 @@ app.post("/save", async (req, res) => {
         const coverlink = 'https://covers.openlibrary.org/b/isbn/' + isbn10 + '-M.jpg';
         const datecreated = new Date().getDate().toString() + "-" + ((new Date().getMonth()) + 1).toString() + "-" + new Date().getFullYear().toString();
         if (isbn10.length != 10) {
-            res.render("create.ejs", {
+            const post = {
+                title: title,
+                genre: genre,
+                author: author,
+                isbn10: "",
+                summary: summary,
+                content: content,
+                rating: rating
+            }
+            res.render("edit.ejs", {
                 user: req.user,
-                errorisbn: 1
+                errorisbn: 1,
+                post: post
             });
         } else if (req.body.action == 'saveChanges') {
             if (req.body.published == false) {
