@@ -542,3 +542,9 @@ form {
     }
 
 }
+
+@media (max-width: 400px) {
+    .signin-field-buttons {
+        padding: 0px;
+    }
+}
