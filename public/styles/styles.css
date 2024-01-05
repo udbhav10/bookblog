@@ -401,6 +401,12 @@ form {
     width: 400px;
 }
 
+@media (max-width: 836px) {
+    .main-right > ul {
+        font-size: 14px;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         margin: 15px 5%;
@@ -437,6 +443,7 @@ form {
         text-align: center !important;
     }
     .main-right>ul {
+        font-size: inherit;
         padding-inline-start: 0px;
         margin-top: 0px;
         display: block;
@@ -474,7 +481,11 @@ form {
     }
 
     .dropdown-content {
-        left: -8px;
+        left: -15px;
+    }
+
+    .signin-buttons {
+        margin: 10px;
     }
     
 }
