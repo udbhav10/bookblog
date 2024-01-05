@@ -464,12 +464,17 @@ form {
     }
 
     .header-links {
+        text-align: center;
         font-size: 9pt;
         padding: 0 5px;
     }
     
     .main-page-button {
         width: 300px;
+    }
+
+    .dropdown-content {
+        left: -8px;
     }
     
 }
