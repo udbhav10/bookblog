@@ -68,7 +68,7 @@ hr {
 .newpost-area {
     display: flex;
     flex-direction: row;
-    justify-content: left;
+    justify-content: center;
     align-items: center;
     /* padding: 20px; */
 }
@@ -167,6 +167,7 @@ hr {
     font-family: 'Quicksand', sans-serif;
     margin-top: 14px;
     line-height: 27.5px;
+    font-size: 15px;
 }
 
 #clearfilterheading:hover {
@@ -211,7 +212,7 @@ form {
     margin-top: -2px;
 }
 
-.create-main > form {
+.create-main>form {
     width: 100%;
 }
 
@@ -220,13 +221,13 @@ form {
     margin: 20px 0px;
 }
 
-.create-field > textarea{
+.create-field>textarea {
     line-height: 25px;
     resize: vertical;
     white-space: pre-wrap;
 }
 
-.create-field > p {
+.create-field>p {
     margin-left: 5px;
     font-family: 'Merriweather', serif;
     text-align: left;
@@ -311,7 +312,8 @@ form {
     width: 335px;
 }
 
-.publish-button, .savedraft-button {
+.publish-button,
+.savedraft-button {
     width: 280px;
 }
 
@@ -386,6 +388,18 @@ form {
     text-shadow: 2px 2px 25px rgb(77, 37, 87, 0.3);
 }
 
+.hide-when-mob {
+    display: inherit;
+}
+
+.hide-when-full {
+    display: none;
+}
+
+.main-page-button {
+    width: 400px;
+}
+
 @media (max-width: 768px) {
     body {
         margin: 15px 5%;
@@ -394,4 +408,65 @@ form {
     .main-heading {
         font-size: 2.5rem;
     }
+
+    .main-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main-center,
+    .review-center,
+    .myposts-center {
+        padding-right: 0px;
+    }
+
+    .line-class-myposts,
+    .newpost-area {
+        grid-column: unset;
+    }
+
+    .main-right {
+        text-align: center;
+        width: 100%;
+    }
+
+    #clearfilterheading {
+        text-align: center !important;
+    }
+    .main-right>ul {
+        padding-inline-start: 0px;
+        margin-top: 0px;
+        display: block;
+        max-height: 0px;
+        overflow: hidden;
+        transition: max-height 0.1s ease;
+        text-align: center;
+    }
+    .main-right>ul>form {
+        text-align: center;
+    }
+    .main-right>ul>form>li {
+        text-align: center;
+    }
+    .main-right>ul>form>li>span {
+        text-align: center;
+    }
+
+    .hide-when-mob {
+        display: none;
+    }
+    
+    .hide-when-full {
+        display: inherit;
+    }
+
+    .header-links {
+        font-size: 9pt;
+    }
+    .main-page-button {
+        width: 300px;
+    }
+    
 }
