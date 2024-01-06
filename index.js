@@ -108,16 +108,18 @@ app.post("/create", async (req, res) => {
     if (req.isAuthenticated()) {
 
         const userid = req.user.id;
-        const title = req.body.title.trim() + " by " + req.body.bookauthor.trim();
-        const genre = req.body.genre.trim();
-        const author = req.body.author.trim();
-        const isbn10 = req.body.isbn.trim();
-        const summary = req.body.summary.trim();
-        const content = req.body.content.trim();
-        const rating = parseInt(req.body.rating);
+        const booktitle = req.body.title.trim() || "<Book Title>"
+        const bookauthor = req.body.bookauthor.trim() || "<Book Author>"
+        const title = (booktitle + " by " + bookauthor);
+        const genre = req.body.genre.trim() || "<Book Genre>";
+        const author = req.body.author.trim() || req.user.fname + " " + req.user.lname;
+        const isbn10 = req.body.isbn.trim().replaceAll("-","") || "0000000000";
+        const summary = req.body.summary.trim() || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
+        const content = req.body.content.trim() || "";
+        const rating = parseInt(req.body.rating) || 5;
         const coverlink = 'https://covers.openlibrary.org/b/isbn/' + isbn10 + '-M.jpg';
         const datecreated = new Date().getDate().toString() + "-" + ((new Date().getMonth()) + 1).toString() + "-" + new Date().getFullYear().toString();
-        if (isbn10.length != 10) {
+        if (isbn10.length != 10 && isbn10.length != 13) {
             const post = {
                 title: title,
                 genre: genre,
@@ -127,11 +129,10 @@ app.post("/create", async (req, res) => {
                 content: content,
                 rating: rating
             }
-            res.render("edit.ejs", {
+            res.render("create.ejs", {
                 user: req.user,
                 errorisbn: 1,
-                post: post,
-                create: 1
+                post: post
             });
         } else if (req.body.action == 'saveDraft') {
 
@@ -159,17 +160,20 @@ app.post("/create", async (req, res) => {
 
 app.post("/save", async (req, res) => {
     if (req.isAuthenticated()) {
-        const title = req.body.title.trim() + " by " + req.body.bookauthor.trim();
-        const genre = req.body.genre.trim();
-        const author = req.body.author.trim();
-        const isbn10 = req.body.isbn.trim();
-        const summary = req.body.summary.trim();
-        const content = req.body.content.trim();
-        const rating = parseInt(req.body.rating);
+        const booktitle = req.body.title.trim() || "<Book Title>"
+        const bookauthor = req.body.bookauthor.trim() || "<Book Author>"
+        const title = (booktitle + " by " + bookauthor);
+        const genre = req.body.genre.trim() || "<Book Genre>";
+        const author = req.body.author.trim() || req.user.fname + " " + req.user.lname;
+        const isbn10 = req.body.isbn.trim().replaceAll("-","") || "0000000000";
+        const summary = req.body.summary.trim() || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
+        const content = req.body.content.trim() || "";
+        const rating = parseInt(req.body.rating) || 5;
         const coverlink = 'https://covers.openlibrary.org/b/isbn/' + isbn10 + '-M.jpg';
         const datecreated = new Date().getDate().toString() + "-" + ((new Date().getMonth()) + 1).toString() + "-" + new Date().getFullYear().toString();
-        if (isbn10.length != 10) {
+        if (isbn10.length != 10 && isbn10.length != 13) {
             const post = {
+                id: req.body.id,
                 title: title,
                 genre: genre,
                 author: author,

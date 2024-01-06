@@ -1,5 +1,21 @@
 <%- include('partials/header-auth.ejs') %>
+<script>
+        function removeRequired() {
+            var fields = document.getElementsByClassName("create-content");
+            for (var i = 0; i < fields.length; i++) {
+                fields[i].removeAttribute("required");
+            }
+            return true; // Allow form submission
+        }
 
+        function addRequired() {
+            var fields = document.getElementsByClassName("create-content");
+            for (var i = 0; i < fields.length; i++) {
+                fields[i].setAttribute("required", true);
+            }
+            return true; // Allow form submission
+        }
+</script>
 <main>
 
     <div class="main-heading">
@@ -12,43 +28,50 @@
         <form action="/create" method="POST">
             <div class="create-field">
                 <input class="create-content" type="text" name="title" id="title" placeholder="Book Title" autofocus
-                    autocomplete="off" required>
-            </div>
-            <div class="create-field">
-                <input class="create-content" type="text" name="bookauthor" id="bookauthor" placeholder="Author"
-                    autocomplete="off" required>
-            </div>
-            <div class="create-field">
-                <input class="create-content" type="text" name="genre" id="genre" placeholder="Genre" autocomplete="off"
+                    autocomplete="off" <% if(!locals.post) {} else { %>value="<%= post.title.split(" by ")[0]%>" <% } %>
                     required>
             </div>
             <div class="create-field">
-                <input class="create-content" type="text" name="isbn" id="isbn" minlength="10" maxlength=""
-                    placeholder="10 digit ISBN number of the book" autocomplete="off" required></input>
+                <input class="create-content" type="text" name="bookauthor" id="bookauthor" placeholder="Author"
+                    autocomplete="off" <% if(!locals.post) {} else { %>value="<%= post.title.split(" by ")[1]%>" <% } %>
+                    required>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="genre" id="genre" placeholder="Genre" autocomplete="off"
+                    <% if(!locals.post) {} else { %>value="<%= post.genre %>" <% } %> required>
+            </div>
+            <div class="create-field">
+                <input class="create-content" type="text" name="isbn" id="isbn" minlength="10"
+                    placeholder="10 or 13 digit ISBN number of the book" autocomplete="off"
+                    <% if(!locals.post) {} else { %>value="<%= post.isbn10 %>" <% } %> required></input>
                 <% if(locals.errorisbn) { %>
                 <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;">Incorrect ISBN</p>
                 <% } else {} %>
             </div>
             <div class="create-field">
-                <input class="create-content" type="text" name="author" id="author" placeholder="Your name" value="<%= user.fname%> <%= user.lname %>"
-                    autocomplete="off" required>
+                <input class="create-content" type="text" name="author" id="author" placeholder="Your name"
+                    value="<%= user.fname%> <%= user.lname %>" autocomplete="off" required>
             </div>
             <div class="create-field">
                 <textarea class="create-content" rows="8" type="text" name="summary" id="summary"
-                    placeholder="Summary (about 100 words)" autocomplete="off" required></textarea>
+                    placeholder="Summary (about 100 words)" autocomplete="off"
+                    required><% if(!locals.post) {} else {%> <%= post.summary %><% } %></textarea>
             </div>
             <div class="create-field">
                 <textarea class="create-content" rows="20" type="text" name="content" id="content"
-                    placeholder="Write your review" autocomplete="off" required></textarea>
+                    placeholder="Write your review" autocomplete="off"
+                    required><% if(!locals.post) {} else {%> <%= post.content %><% } %></textarea>
             </div>
             <div class="create-field">
                 <input class="create-content" style="width: 96.7%;" type="number" name="rating" id="rating"
-                    placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off" required>
+                    placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off"
+                    <% if(!locals.post) {} else { %>value=<%= parseInt(post.rating) %> <% } %> required>
             </div>
             <div class="signin-field-buttons">
-                <button type="submit" name="action" value="saveDraft" class="signin-buttons savedraft-button">Save
+                <button onclick="removeRequired()" type="submit" name="action" value="saveDraft"
+                    class="signin-buttons savedraft-button">Save
                     draft</button>
-                <button type="submit" name="action" value="publish"
+                <button onclick="addRequired()" type="submit" name="action" value="publish"
                     class="signin-buttons publish-button">Publish</button>
             </div>
 
@@ -63,6 +86,8 @@
 <script>
     $(document).ready(function () {
 
+
+
         $("#isbn").on("input", function () {
             checkLengthISBN();
         });
@@ -72,7 +97,9 @@
         });
 
         function checkLengthISBN() {
-            if ($("#isbn").val().length != 10 && $("#isbn").val().length != 0) {
+            if (($("#isbn").val().trim().replaceAll("-", "").length != 10 && $("#isbn").val().trim().replaceAll(
+                    "-",
+                    "").length != 13) && $("#isbn").val().length != 0) {
                 $("#isbn").css("background-color", "#ff00000f");
             } else {
                 $("#isbn").css("background-color", "");

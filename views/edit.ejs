@@ -1,5 +1,15 @@
 <%- include('partials/header-auth.ejs') %>
+<script>
+    function removeRequired() {
+        var fields = document.getElementsByClassName("create-content");
+        if ( !<%= post.published %> )  {
+        for (var i = 0; i < fields.length; i++) {
+            fields[i].removeAttribute("required");
+        } } else {}
+        return true; // Allow form submission
+    }
 
+</script>
 <main>
 
     <div class="main-heading">
@@ -25,8 +35,8 @@
                     value="<%= post.genre %>" required>
             </div>
             <div class="create-field">
-                <input class="create-content" type="text" name="isbn" id="isbn" minlength="10" maxlength=""
-                    value="<%= post.isbn10 %>" placeholder="10 digit ISBN number of the book" autocomplete="off"
+                <input class="create-content" type="text" name="isbn" id="isbn" minlength="10"
+                    value="<%= post.isbn10 %>" placeholder="10 or 13 digit ISBN number of the book" autocomplete="off"
                     required></input>
                 <% if(locals.errorisbn) { %>
                 <p style="color: red; font-size: 15px; font-family: 'Quicksand', sans-serif;">Incorrect ISBN</p>
@@ -49,21 +59,10 @@
                     value="<%= post.rating %>" placeholder="Rate the book out of 5" min="1" max="5" autocomplete="off"
                     required>
             </div>
-            <% if(!locals.create) { %>
             <div class="signin-field-buttons">
-                <button type="submit" name="action" value="saveChanges" class="signin-buttons savedraft-button">Save
+                <button onclick="removeRequired()" type="submit" name="action" value="saveChanges" class="signin-buttons savedraft-button">Save
                     changes</button>
             </div>
-            <% } else { %>
-
-            <div class="signin-field-buttons">
-                <button type="submit" name="action" value="saveDraft" class="signin-buttons savedraft-button">Save
-                    draft</button>
-                <button type="submit" name="action" value="publish"
-                    class="signin-buttons publish-button">Publish</button>
-            </div>
-
-            <% } %>
         </form>
     </div>
 </main>
@@ -84,7 +83,9 @@
         });
 
         function checkLengthISBN() {
-            if ($("#isbn").val().length != 10 && $("#isbn").val().length != 0) {
+            if (($("#isbn").val().trim().replaceAll("-", "").length != 10 && $("#isbn").val().trim().replaceAll(
+                    "-",
+                    "").length != 13) && $("#isbn").val().length != 0) {
                 $("#isbn").css("background-color", "#ff00000f");
             } else {
                 $("#isbn").css("background-color", "");
