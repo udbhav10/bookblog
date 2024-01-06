@@ -54,13 +54,26 @@ async function fetchDrafts() {
 
 app.use(flash());
 app.get("/", async (req, res) => {
+    let data = await fetchData();
+    let sortedData = [...data];
     if (req.isAuthenticated()) {
         const user = req.user;
         res.render("index-auth.ejs", {
-            user: user
+            user: user,
+            data: sortedData.sort((a, b) => b.datepublished.localeCompare(a.datepublished))
         });
     } else {
-        res.render("index.ejs");
+        res.render("index.ejs", {
+            data: sortedData.sort((a, b) => b.datepublished.localeCompare(a.datepublished))
+        });
+    }
+})
+
+app.get("/contact", (req, res) => {
+    if(req.isAuthenticated()) {
+        res.render("contact-auth.ejs", {user: req.user});
+    } else {
+        res.render("contact.ejs");
     }
 })
 
@@ -314,11 +327,11 @@ app.post("/reviews", async (req, res) => {
             user: user
         });
         else if (datesort == 'asc') res.render("reviews-auth.ejs", {
-            data: sortedData.sort((a, b) => a.date.localeCompare(b.date)),
+            data: sortedData.sort((a, b) => a.datepublished.localeCompare(b.datepublished)),
             user: user
         });
         else if (datesort == 'desc') res.render("reviews-auth.ejs", {
-            data: sortedData.sort((a, b) => b.date.localeCompare(a.date)),
+            data: sortedData.sort((a, b) => b.datepublished.localeCompare(a.datepublished)),
             user: user
         });
         else if (req.body.clear) res.redirect("/reviews");
@@ -344,10 +357,10 @@ app.post("/reviews", async (req, res) => {
             data: sortedData.sort((a, b) => b.rating - a.rating)
         });
         else if (datesort == 'asc') res.render("reviews.ejs", {
-            data: sortedData.sort((a, b) => a.date.localeCompare(b.date))
+            data: sortedData.sort((a, b) => a.datepublished.localeCompare(b.datepublished))
         });
         else if (datesort == 'desc') res.render("reviews.ejs", {
-            data: sortedData.sort((a, b) => b.date.localeCompare(a.date))
+            data: sortedData.sort((a, b) => b.datepublished.localeCompare(a.datepublished))
         });
         else if (req.body.clear) res.redirect("/reviews");
     }

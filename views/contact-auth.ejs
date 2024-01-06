@@ -1,0 +1,61 @@
+<%- include('partials/header-auth.ejs') %>
+
+<div class="main-heading">
+    <span style="color: #4D2557; font-weight: bold;">About </span><span style="color: #D886AF; font-weight: regular;">
+        Me</span>
+</div>
+<hr style="margin-bottom: 20px;">
+<div class="contact-body">
+    <div class="contact-left">
+        <div>
+            <h1 style="margin-top: 0px;">Hi, I'm <span style="color: #D886AF;">Udbhav</span><span
+                    style="font-size: 45px;">.</span></h1>
+            <p>I have made this website solely out of my hobby for web development. I am hoping this website revitalizes
+                my
+                passion
+                for reading books, and perhaps yours too. You can reach me out on <span id="insta-text"
+                    class="social"><a
+                        href="https://www.instagram.com/udbhavdalal/?igsh=MWVubWZtcXdzcGZ3cQ%3D%3D">Instagram</a></span>,
+                <span id="X-text" class="social"><a
+                        href="https://twitter.com/UdbhavDalal?t=c_zIqsD2M4Y6GnkkueUc0Q&s=09">X</a></span> and <span
+                    id="li-text" class="social"><a
+                        href="https://www.linkedin.com/in/udbhav-dalal-a64410207/">LinkedIn</a></span> to make
+                suggestions or report any bugs. Feedback is encouraged. In the meantime, feel free to post.
+            </p>
+            <p style="margin-bottom: 0px; font-weight: 600;">Happy Blogging!</p>
+        </div>
+    </div>
+    <div class="contact-right">
+        <div class="carousel-phone">
+            <img class="phone-border" src="images/border.png" alt="border-image">
+            <a href="https://www.instagram.com/udbhavdalal/?igsh=MWVubWZtcXdzcGZ3cQ%3D%3D"><img id="insta"
+                    class="phone-carousel active-img" src="images/insta.png" alt="insta-image"></a>
+            <a href="https://twitter.com/UdbhavDalal?t=c_zIqsD2M4Y6GnkkueUc0Q&s=09"><img id="x" class="phone-carousel"
+                    src="images/x.png" alt="x-image"></a>
+            <a href="https://www.linkedin.com/in/udbhav-dalal-a64410207/"><img id="li" class="phone-carousel"
+                    src="images/li.png" alt="li-image"></a>
+        </div>
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        let phonearr = ['insta', 'x', 'li'];
+        let index = 1;
+
+        function changeImage() {
+            $(".phone-carousel").removeClass('active-img');
+            $("#" + phonearr[index]).addClass('active-img');
+
+            // Update the index based on the increment value
+            index = (index + 1) % phonearr.length;
+        }
+
+        // Set an interval to change the image every 5000 milliseconds (5 seconds)
+        setInterval(changeImage, 5000);
+    });
+</script>
+
+<%- include('partials/footer-auth.ejs') %>

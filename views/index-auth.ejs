@@ -85,8 +85,27 @@
             <h4 style="margin-top: 0px; margin-bottom: 8px;"><span style="color: #4D2557; font-weight: bold;">LATEST
                     REVIEWS ON BOOK</span><span style="color: #D886AF; font-weight: regular;">BLOG</span></h4>
             <hr style="opacity: 15%;">
+            <% let num = 1 %>
+            <% data.forEach(review => { %>
+            <form action="/view" class="reviews-form" id="<%= num %>-post-filter-form" method="POST">
+                <input type="hidden" value="<%= JSON.stringify(review) %>" name="post" />
+                <p class="latest-reviews"><span id="<%=num%>-title"><%= review.title %></span></p>
+            </form>
+            <% num++ %>
+            <% }) %>
         </div>
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+
+<script>
+    for(let i = 1; i <= <%= data.length %>; i++) {
+        $(".latest-reviews>#" + i + "-title").on("click", () => {
+            $("#" + i + "-post-filter-form").submit();
+        })
+    }
+
+</script>
 
 <%- include('partials/footer-auth.ejs') %>
