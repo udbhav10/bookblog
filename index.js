@@ -1,33 +1,26 @@
 import bodyParser from "body-parser";
-import axios from "axios";
-// import pg from "pg";
+import pg from 'pg';
 import express from "express";
 import bcrypt from "bcrypt";
-import {
-    pool
-} from "./dbConfig.js";
 import session from "express-session";
 import flash from "express-flash";
 import passport from "passport";
+import dotenv from "dotenv";
 import {
-    initialize
-} from "./passportConfig.js";
-initialize(passport);
+    Strategy as LocalStrategy
+} from "passport-local";
+import {
+    Strategy as GoogleStrategy
+} from "passport-google-oauth20";
+dotenv.config();
+
 const app = express();
 const port = 3000;
-
-// const db = new pg.Client({
-//     user: "postgres",
-//     host: "localhost",
-//     database: "auth",
-//     password: "dalal123",
-//     port: 5432,
-// });
-// db.connect();
 
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
 app.use(express.static("public"));
 
 app.use(
@@ -39,6 +32,84 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+const pool = new pg.Client({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DB,
+    password: process.env.DB_PWD,
+    port: 5432
+});
+
+pool.connect();
+
+const authenticateUser = async (username, password, done) => {
+    try {
+        const result = await pool.query("select * from users where username = $1", [username]);
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+            return done(null, user);
+        } else {
+
+            return done(null, false, {
+                message: "Incorrect Password"
+            });
+        }
+    } catch (error) {
+        return done(null, false, {
+            message: "Username not found"
+        });
+    }
+}
+
+passport.use(
+    new LocalStrategy({
+            usernameField: "username",
+            passwordField: "password"
+        },
+        authenticateUser
+    ));
+
+passport.use(
+    new GoogleStrategy({
+            clientID: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            callbackURL: "https://bookblog.onrender.com/auth/google/home",
+            userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+        },
+        function (accessToken, refreshToken, profile, cb) {
+            const google_id = profile.id;
+            const fname = profile.name.givenName;
+            const lname = profile.name.familyName;
+            pool.query("select * from users where google_id = $1", [google_id], (err, result) => {
+                if (err) {
+                    return cb(err);
+                } else if (!result.rows.length) {
+                    pool.query("insert into users (google_id, fname, lname) values ($1, $2, $3) returning *", [google_id, fname, lname], (err, result) => {
+                        if (err) {
+                            return cb(err)
+                        } else {
+                            return cb(null, result.rows[0]);
+                        }
+                    })
+                } else {
+                    return cb(null, result.rows[0]);
+                }
+            });
+        }))
+
+passport.serializeUser((user, done) => done(null, user.id));
+
+passport.deserializeUser((id, done) => {
+    pool.query("select * from users where id = $1", [id], (err, results) => {
+        if (err) {
+            throw err;
+        } else {
+            return done(null, results.rows[0]);
+        }
+    });
+})
 
 async function fetchData() {
     const result = await pool.query("select * from published");
@@ -70,8 +141,10 @@ app.get("/", async (req, res) => {
 })
 
 app.get("/contact", (req, res) => {
-    if(req.isAuthenticated()) {
-        res.render("contact-auth.ejs", {user: req.user});
+    if (req.isAuthenticated()) {
+        res.render("contact-auth.ejs", {
+            user: req.user
+        });
     } else {
         res.render("contact.ejs");
     }
@@ -113,7 +186,7 @@ app.post("/create", async (req, res) => {
         const title = (booktitle + " by " + bookauthor);
         const genre = req.body.genre.trim() || "<Book Genre>";
         const author = req.body.author.trim() || req.user.fname + " " + req.user.lname;
-        const isbn10 = req.body.isbn.trim().replaceAll("-","") || "0000000000";
+        const isbn10 = req.body.isbn.trim().replaceAll("-", "") || "0000000000";
         const summary = req.body.summary.trim() || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
         const content = req.body.content.trim() || "";
         const rating = parseInt(req.body.rating) || 5;
@@ -165,7 +238,7 @@ app.post("/save", async (req, res) => {
         const title = (booktitle + " by " + bookauthor);
         const genre = req.body.genre.trim() || "<Book Genre>";
         const author = req.body.author.trim() || req.user.fname + " " + req.user.lname;
-        const isbn10 = req.body.isbn.trim().replaceAll("-","") || "0000000000";
+        const isbn10 = req.body.isbn.trim().replaceAll("-", "") || "0000000000";
         const summary = req.body.summary.trim() || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.";
         const content = req.body.content.trim() || "";
         const rating = parseInt(req.body.rating) || 5;
@@ -251,8 +324,8 @@ app.post("/publish", async (req, res) => {
     if (req.isAuthenticated()) {
 
         await pool.query("update userdrafts set published = true where id = $1", [post.id]);
-        await pool.query("insert into published (userid, userpostid, isbn10, coverlink, genre, author, title, summary, content, rating, datepublished) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)", 
-        [userid, userpostid, isbn10, coverlink, genre, author, title, summary, content, rating, datepublished  ]);
+        await pool.query("insert into published (userid, userpostid, isbn10, coverlink, genre, author, title, summary, content, rating, datepublished) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)",
+            [userid, userpostid, isbn10, coverlink, genre, author, title, summary, content, rating, datepublished]);
         res.redirect("/myposts");
 
     } else {
@@ -387,6 +460,18 @@ app.get("/myposts", async (req, res) => {
     }
 })
 
+app.get("/auth/google", passport.authenticate("google", {
+    scope: ['profile']
+}))
+
+app.get("/auth/google/home", passport.authenticate("google", {
+        failureRedirect: "/signin"
+    }),
+    function (req, res) {
+        res.redirect("/");
+    }
+)
+
 app.get("/signin", async (req, res) => {
     const errorMessage = req.flash("error");
     res.render("signin.ejs", {
@@ -406,28 +491,6 @@ app.post("/signin", passport.authenticate("local", {
     failureRedirect: "/signin",
     failureFlash: true
 }))
-
-// app.post("/signin", async (req, res) => {
-//     const username = req.body.username;
-//     try {
-//         const storedPassword = await pool.query("select * from users where username = $1", [username]);
-//         const isMatch = await bcrypt.compare(req.body.password, storedPassword.rows[0].password);
-//         if (isMatch) {
-//             res.render("signedInIndex.ejs", {
-//                 user: storedPassword.rows[0]
-//             });
-//         } else {
-//             res.render("signin.ejs", {
-//                 error: "Username or password not found."
-//             });
-//         }
-//     } catch (error) {
-//         res.render("signin.ejs", {
-//             error: "Username or password not found."
-//         });
-//     }
-
-// })
 
 app.get("/register", async (req, res) => {
     res.render("register.ejs");
