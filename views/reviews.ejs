@@ -42,7 +42,7 @@
                     <img src="<%=review.coverlink%>" alt="Cover photo" style="float: left; margin-right: 20px; height: 200px;">
                     <p class="review-title"><%=review.title%></p>
                     </form>
-                    <p class="author-date" style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.date%></p>
+                    <p class="author-date" style="opacity: 0.65; margin-bottom: 7px;">by <%=review.author%> | Published on <%=review.datepublished%></p>
                     <p style="opacity: 0.65; margin-bottom: 7px;">Genre: <%= review.genre %></p>
                     <p>Rating:
                         <% for (let i = 0; i < review.rating; i++) { %>
