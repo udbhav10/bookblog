@@ -277,7 +277,7 @@ app.post("/save", async (req, res) => {
 
             } else {
 
-                await pool.query('update userdrafts set title = $1, isbn10 = $2, coverlink = $3, genre = $4, author = $5, summary = $6, content = $7, rating = $8, datecreated = $9 where id = $10',
+                await pool.query('update userdrafts set title = $1, isbn10 = $2, coverlink = $3, genre = $4, author = $5, summary = $6, content = $7, rating = $8, datepublished = $9 where id = $10',
                     [title, isbn10, coverlink, genre, author, summary, content, rating, datecreated, req.body.id]);
 
                 await pool.query('update published set title = $1, isbn10 = $2, coverlink = $3, genre = $4, author = $5, summary = $6, content = $7, rating = $8, datepublished = $9 where userpostid = $10',
