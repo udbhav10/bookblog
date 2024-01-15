@@ -123,6 +123,14 @@ async function fetchDrafts() {
     return data;
 }
 
+function convertDate(date) {
+    let parts = date.trim().split('-')
+    let day = parts[0];
+    parts[0] = parts[1];
+    parts[1] = day;
+    return parts.join('-');
+}
+
 app.use(flash());
 app.get("/", async (req, res) => {
     let data = await fetchData();
@@ -131,11 +139,11 @@ app.get("/", async (req, res) => {
         const user = req.user;
         res.render("index-auth.ejs", {
             user: user,
-            data: sortedData.sort((a, b) => new Date(b.datepublished) - new Date(a.datepublished))
+            data: sortedData.sort((a, b) => new Date(convertDate(b.datepublished)) - new Date(convertDate(a.datepublished)))
         });
     } else {
         res.render("index.ejs", {
-            data: sortedData.sort((a, b) => new Date(b.datepublished) - new Date(a.datepublished))
+            data: sortedData.sort((a, b) => new Date(convertDate(b.datepublished)) - new Date(convertDate(a.datepublished)))
         });
     }
 })
@@ -404,11 +412,11 @@ app.post("/reviews", async (req, res) => {
             user: user
         });
         else if (datesort == 'asc') res.render("reviews-auth.ejs", {
-            data: sortedData.sort((a, b) => new Date(a.datepublished) - new Date(b.datepublished)),
+            data: sortedData.sort((a, b) => new Date(convertDate(a.datepublished)) - new Date(convertDate(b.datepublished))),
             user: user
         });
         else if (datesort == 'desc') res.render("reviews-auth.ejs", {
-            data: sortedData.sort((a, b) => new Date(b.datepublished) - new Date(a.datepublished)),
+            data: sortedData.sort((a, b) => new Date(convertDate(b.datepublished)) - new Date(convertDate(a.datepublished))),
             user: user
         });
         else if (req.body.clear) res.redirect("/reviews");
@@ -434,10 +442,10 @@ app.post("/reviews", async (req, res) => {
             data: sortedData.sort((a, b) => b.rating - a.rating)
         });
         else if (datesort == 'asc') res.render("reviews.ejs", {
-            data: sortedData.sort((a, b) => new Date(a.datepublished) - new Date(b.datepublished))
+            data: sortedData.sort((a, b) => new Date(convertDate(a.datepublished)) - new Date(convertDate(b.datepublished)))
         });
         else if (datesort == 'desc') res.render("reviews.ejs", {
-            data: sortedData.sort((a, b) => new Date(b.datepublished) - new Date(a.datepublished))
+            data: sortedData.sort((a, b) => new Date(convertDate(b.datepublished)) - new Date(convertDate(a.datepublished)))
         });
         else if (req.body.clear) res.redirect("/reviews");
     }
@@ -450,8 +458,8 @@ app.get("/myposts", async (req, res) => {
         res.render("myposts.ejs", {
             user: req.user,
             data: sortedData.filter((review) => review.userid == req.user.id),
-            published: sortedData.filter((review) => review.userid == req.user.id && review.published == true).sort((a, b) => new Date(b.datepublished) - new Date(a.datepublished)),
-            drafts: sortedData.filter((review) => review.userid == req.user.id && review.published == false).sort( (a, b) => new Date(b.datecreated) - new Date(a.datecreated) )
+            published: sortedData.filter((review) => review.userid == req.user.id && review.published == true).sort((a, b) => new Date(convertDate(b.datepublished)) - new Date(convertDate(a.datepublished))),
+            drafts: sortedData.filter((review) => review.userid == req.user.id && review.published == false).sort( (a, b) => new Date(convertDate(b.datecreated)) - new Date(convertDate(a.datecreated)) )
         });
     } else {
         res
